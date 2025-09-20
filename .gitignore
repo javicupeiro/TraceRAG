@@ -37,9 +37,8 @@ volumes/*
 # Ignore the checkpoint directories created by Jupyter.
 .ipynb_checkpoints/
 notebooks/
+scripts/
 
-src/llm_provider/
 src/ui/
-src/prompts/
 src/core/
 src/processing/multimodal_summarizer.py
