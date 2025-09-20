@@ -40,8 +40,6 @@ notebooks/
 
 src/llm_provider/
 src/ui/
-src/database/
 src/prompts/
 src/core/
 src/processing/multimodal_summarizer.py
-docker-compose.yml
