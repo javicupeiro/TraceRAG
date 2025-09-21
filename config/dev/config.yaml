@@ -1,0 +1,28 @@
+# Develop: config.yaml
+
+LLM:
+  GROQ:
+    MODEL: "meta-llama/llama-4-scout-17b-16e-instruct"
+    RATE_LIMIT: 0.3   # seconds between request
+    MAX_OUTPUT_TOKENS: 1024
+    TEMPERATURE: 1
+
+  GEMINI:
+    MODEL: "gemini-1.5-flash"
+    RATE_LIMIT: 0.3   # seconds between request
+    MAX_OUTPUT_TOKENS: 1024
+    TEMPERATURE: 1
+
+EMBEDDING:
+  NAME: "sentence-transformers/all-MiniLM-L6-v2" # Info: https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2
+  # Dimension is required for Milvus
+  DIMENSIONS: 384 
+
+DATABASE:
+  SQL:
+    PATH: "data/document_store/documents.db" 
+  MILVUS:
+    HOST: "localhost"
+    PORT: "19530"
+    COLLECTION_NAME: "md_chunks_v1" # Name for the collection in Milvus
+

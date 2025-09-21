@@ -1,0 +1,14 @@
+Eres un asistente encargado de resumir textos. 
+Proporciona un resumen conciso del siguiente texto.
+Escribe en español.
+
+TEXTO A RESUMIR:
+"""
+{text_content}
+"""
+
+Responde únicamente con el resumen, sin comentarios adicionales.
+
+No comiences tu mensaje diciendo "Aquí tienes un resumen" ni nada similar.
+
+Simplemente proporciona el resumen tal cual.

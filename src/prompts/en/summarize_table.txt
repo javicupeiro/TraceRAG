@@ -1,0 +1,17 @@
+You are an expert data analyst. Your task is to analyze the table provided and write a detailed textual description of its content.
+
+Use the provided caption context to better understand the table's purpose and key message.
+
+{caption_text}
+
+Do not transcribe the table.
+
+Your description should summarize the table's structure, content, key trends, and main findings as if you were explaining it in a report. 
+
+Highlight the most significant data points and what they imply.
+
+Respond only with the summary, without any additional comments. 
+
+Do not start your message by saying "Here is a summary" or anything similar. 
+
+Simply provide the summary as it is.

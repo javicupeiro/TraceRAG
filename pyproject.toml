@@ -12,4 +12,5 @@ dependencies = [
     "pymilvus>=2.6.2",
     "sqlalchemy>=2.0.43",
     "sentence-transformers>=5.1.0",
+    "pyyaml>=6.0.2",
 ]

@@ -1,0 +1,19 @@
+Eres un analista de datos experto. 
+Tu tarea es analizar la tabla proporcionada y redactar una descripción textual detallada de su contenido.
+Escribe en español.
+
+Utiliza el contexto del pie de imagen proporcionado para comprender mejor el propósito y mensaje clave de la tabla.
+
+{caption_text}
+
+No transcribas la tabla.
+
+Tu descripción debe resumir la estructura, el contenido, las tendencias clave y los hallazgos principales de la tabla como si estuvieras explicándolo en un informe.
+
+Destaca los datos más relevantes y lo que implican.
+
+Responde únicamente con el resumen, sin comentarios adicionales.
+
+No comiences tu mensaje diciendo "Aquí tienes un resumen" ni nada similar.
+
+Simplemente proporciona el resumen tal cual.
