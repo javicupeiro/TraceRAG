@@ -41,3 +41,6 @@ scripts/
 
 src/data/document_store/
 src/data/vector_store/
+
+tests/
+.pytest_cache

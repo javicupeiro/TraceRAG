@@ -7,6 +7,7 @@ from llm_provider.base_llm_provider import LLMChunk
 from pathlib import Path
 from typing import List, Tuple
 import numpy as np
+import time
 import logging
 
 # Get a logger for the current module
@@ -162,7 +163,10 @@ def build_multimodal_prompt_and_chunks(chunks: List[dict]) -> Tuple[str, List[LL
     final_context_str = "\n\n".join(prompt_context_parts)
     return final_context_str, llm_chunks
 
-def render_tab3(embedder: Embedder, vector_handler: VectorHandler, sql_handler: SQLHandler, base_prompt_dir: str):
+def render_tab3(embedder: Embedder, 
+                vector_handler: VectorHandler, 
+                sql_handler: SQLHandler, 
+                base_prompt_dir: str):
     """
     Renders the 'Chat with Documents' tab in the Streamlit UI.
 
@@ -214,18 +218,30 @@ def render_tab3(embedder: Embedder, vector_handler: VectorHandler, sql_handler: 
         provider_name = provider_options[selected_provider]
     
     with col3:
-        # Search metric selector
-        metric_options = {
-            'Cosine Similarity': 'cosine',
-            'Euclidean Distance': 'l2'
-        }
-        selected_metric = st.selectbox(
-            "🔍 Search Metric",
-            options=list(metric_options.keys()),
+        # Reranking toggle
+        use_reranking = st.selectbox(
+            "🔄 Reranking",
+            options=["Enabled", "Disabled"],
             index=0,
-            help="Similarity metric for ranking retrieved documents"
+            help="Use reranking to improve result relevance"
         )
-        search_metric = metric_options[selected_metric]
+
+        # Show search metric only when reranking is disabled
+        if use_reranking == "Disabled":
+            metric_options = {
+                'Cosine Similarity': 'cosine',
+                'Euclidean Distance': 'l2'
+            }
+            selected_metric = st.selectbox(
+                "🔍 Search Metric",
+                options=list(metric_options.keys()),
+                index=0,
+                help="Similarity metric for ranking retrieved documents"
+            )
+            search_metric = metric_options[selected_metric]
+        else:
+            # When reranking is enabled, search metric is not relevant
+            search_metric = 'cosine'  # Default, but not used
 
     # Load the correct chat prompt based on the selected language
     prompt_template_path = Path(base_prompt_dir) / lang_code / "query_context.txt"
@@ -270,7 +286,9 @@ def render_tab3(embedder: Embedder, vector_handler: VectorHandler, sql_handler: 
                     query_embedding = embedder.embed([query])[0]
                     
                     # 2. Perform vector search (always use IP for Milvus, we'll re-rank locally)
-                    search_results = vector_handler.search_similar(query_embedding, k=10, metric_type="IP")
+                    # Performs vector search with more candidates if reranking is enabled
+                    k_candidates = 20 if use_reranking == "Enabled" else 5
+                    search_results = vector_handler.search_similar(query_embedding, k=k_candidates, metric_type="IP")
                     
                     if not search_results:
                         st.warning("Could not find any relevant chunks in the documents.")
@@ -294,53 +312,68 @@ def render_tab3(embedder: Embedder, vector_handler: VectorHandler, sql_handler: 
                             chunk['cosine_similarity'] = 0.0
                             chunk['l2_distance'] = float('inf')
                     
-                    # 4. Sort by the user-selected metric
-                    if search_metric == 'cosine':
-                        original_chunks.sort(key=lambda x: x['cosine_similarity'], reverse=True)
-                        # Take top 5 after re-ranking
-                        original_chunks = original_chunks[:5]
-                    else:  # l2
-                        original_chunks.sort(key=lambda x: x['l2_distance'])
-                        # Take top 5 after re-ranking
-                        original_chunks = original_chunks[:5]
+                    # 3.5. Apply reranking if enabled
+                    if use_reranking == "Enabled":
+                        try:
+                            # Importar módulos necesarios
+                            from core.reranker.reranker_handler import RerankerHandler
+                            from core.config_manager import get_config_manager
+                            
+                            # Inicializar reranker
+                            config_manager = get_config_manager()
+                            reranker_config = config_manager.get('RERANKING', {})
+                            
+                            if reranker_config.get('ENABLED', False):
+                                reranker = RerankerHandler(
+                                    primary_provider="jina",
+                                    **reranker_config.get('JINA', {})
+                                )
+                                
+                                # Aplicar reranking
+                                with st.spinner("🔄 Reranking results..."):
+                                    reranker_response = reranker.rerank_chunks(
+                                        query=query,
+                                        chunks=original_chunks,
+                                        top_k=5
+                                    )
+                                    
+                                    # Obtener chunks reordenados
+                                    original_chunks = reranker.get_reranked_chunks(reranker_response)
+                                    
+                                    # Mostrar info de reranking
+                                    st.info(f"🔄 Reranked {reranker_response.total_processed} results in {reranker_response.processing_time:.2f}s using {reranker_response.model_used}")
+                            
+                        except Exception as e:
+                            st.warning(f"⚠️ Reranking failed, using original order: {e}")
+                            logger.error(f"Reranking error: {e}")
                     
-                    # 4. Create LLM provider
+                    # 4. Sort by the user-selected metric (MODIFICADO: solo si no se usó reranking)
+                    if use_reranking == "Disabled":
+                        if search_metric == 'cosine':
+                            original_chunks.sort(key=lambda x: x['cosine_similarity'], reverse=True)
+                            original_chunks = original_chunks[:5]
+                        else:  # l2
+                            original_chunks.sort(key=lambda x: x['l2_distance'])
+                            original_chunks = original_chunks[:5]
+                    
+                    # 5. Create LLM provider - MOVER AQUÍ DESPUÉS DEL RERANKING
                     with st.spinner(f"🤖 Initializing {selected_provider}..."):
                         try:
                             llm_provider = LLMProviderFactory.create_provider(provider_name)
                             logger.info(f"Successfully created {provider_name} provider")
                         except Exception as e:
-                            st.error(f"❌ Failed to initialize {selected_provider}: {str(e)}")
+                            st.error(f"⌫ Failed to initialize {selected_provider}: {str(e)}")
                             st.error("Please check your API keys in environment variables")
                             logger.error(f"Failed to create {provider_name} provider: {e}")
                             return
                     
-                    # 5. Build multimodal prompt and chunks
+                    # 6. Build multimodal prompt and chunks
                     context_str, llm_chunks = build_multimodal_prompt_and_chunks(original_chunks)
                     formatted_prompt = prompt_template.format(context=context_str, query=query)
                     
-                    # 6. Generate response from LLM
+                    # 7. Generate response from LLM
                     with st.spinner(f"💭 Generating response with {selected_provider}..."):
                         response = llm_provider.answer_query(llm_chunks, formatted_prompt)
-
-                    # 7. Display response and sources
-                    st.markdown(response.content)
-                    
-                    # Show response metadata
-                    with st.expander("ℹ️ Response Info", expanded=False):
-                        col1, col2, col3 = st.columns(3)
-                        with col1:
-                            st.metric("Model Used", response.model_used)
-                        with col2:
-                            if response.tokens_used:
-                                st.metric("Tokens Used", response.tokens_used)
-                        with col3:
-                            if response.response_time:
-                                st.metric("Response Time", f"{response.response_time:.2f}s")
-                    
-                    with st.expander("📚 View used sources"):
-                        for src_idx, chunk in enumerate(original_chunks):
-                            display_chunk(chunk, key_prefix=f"current_{src_idx}", search_metric=search_metric)
                     
                     # 8. Add response to chat history
                     st.session_state.messages.append({
@@ -356,6 +389,10 @@ def render_tab3(embedder: Embedder, vector_handler: VectorHandler, sql_handler: 
                             "search_metric": search_metric
                         }
                     })
+
+                    # FORCE STREAMLIT TO REFRESH THE UI
+                    time.sleep(0.1)  # Small delay to ensure processing is complete
+                    st.rerun()
                     
                 except Exception as e:
                     st.error(f"An error occurred during chat: {e}")

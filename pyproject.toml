@@ -13,4 +13,6 @@ dependencies = [
     "sqlalchemy>=2.0.43",
     "sentence-transformers>=5.1.0",
     "pyyaml>=6.0.2",
+    "pytest>=8.4.2",
+    "pytest-mock>=3.15.1",
 ]

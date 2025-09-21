@@ -29,3 +29,21 @@ DATABASE:
 DOCUMENT_PROCESSING:
   KNOWLEDGE_BASE_PATH: "data/knowledge_base"
   SUPPORTED_EXTENSIONS: [".pdf", ".md", ".markdown"]
+
+RERANKING:
+  ENABLED: true
+  PRIMARY_PROVIDER: "jina"
+  FALLBACK_ENABLED: true
+  
+  JINA:
+    MODEL_NAME: "jina-reranker-v2-base-multilingual"
+    API_BASE: "https://api.jina.ai/v1/rerank"
+    MAX_RETRIES: 3
+    TIMEOUT: 30
+  
+  PARAMETERS:
+    INITIAL_K: 20  # More candidates for reranking
+    FINAL_K: 5     # Final result after reranking
+    MIN_SCORE_THRESHOLD: 0.1  # Minimum score to include
+
+
