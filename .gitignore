@@ -43,4 +43,3 @@ src/ui/
 src/core/
 src/data/doc_store/
 src/data/vector_store/
-src/processing/multimodal_summarizer.py
