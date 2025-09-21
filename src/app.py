@@ -143,7 +143,7 @@ def main():
     # Clear database functionality
     st.sidebar.warning("⚠️ Danger Zone")
     
-    if st.sidebar.button("🗑️ Clear ALL databases", use_container_width=True):
+    if st.sidebar.button("🗑️ Clear ALL databases", width="stretch"):
         @st.dialog("Confirmation Required")
         def confirm_delete():
             st.write("⚠️ **This will permanently delete all processed documents and their embeddings.**")
@@ -151,10 +151,10 @@ def main():
             
             col1, col2 = st.columns(2)
             with col1:
-                if st.button("❌ Cancel", use_container_width=True):
+                if st.button("❌ Cancel", width="stretch"):
                     st.rerun()
             with col2:
-                if st.button("✅ Yes, delete everything", type="primary", use_container_width=True):
+                if st.button("✅ Yes, delete everything", type="primary", width="stretch"):
                     with st.spinner("Clearing databases..."):
                         try:
                             sql_handler.delete_all_data()

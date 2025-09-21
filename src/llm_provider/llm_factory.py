@@ -47,11 +47,17 @@ class LLMProviderFactory:
         Get config manager, with fallback if not available.
         """
         try:
-            from ..core.config_manager import get_config_manager
+            # Try absolute import first
+            from src.core.config_manager import get_config_manager
             return get_config_manager()
         except ImportError:
-            logger.warning("Config manager not available, using fallback defaults")
-            return None
+            try:
+                # Try relative import
+                from core.config_manager import get_config_manager
+                return get_config_manager()
+            except ImportError:
+                logger.debug("Config manager not available, using fallback defaults")
+                return None
 
     @classmethod
     def _get_provider_config(cls, provider_name: str) -> Dict[str, Any]:

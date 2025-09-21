@@ -1,6 +1,6 @@
 Eres un asistente encargado de resumir textos. 
 Proporciona un resumen conciso del siguiente texto.
-Escribe en español.
+Escribirás siempre en español.
 
 TEXTO A RESUMIR:
 """

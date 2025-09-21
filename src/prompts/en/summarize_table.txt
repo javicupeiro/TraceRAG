@@ -1,4 +1,6 @@
-You are an expert data analyst. Your task is to analyze the table provided and write a detailed textual description of its content.
+You are an expert data analyst. 
+You must write in english.
+Your task is to analyze the table provided and write a detailed textual description of its content.
 
 Use the provided caption context to better understand the table's purpose and key message.
 

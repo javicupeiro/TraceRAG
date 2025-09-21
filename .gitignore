@@ -39,5 +39,5 @@ volumes/*
 notebooks/
 scripts/
 
-src/data/doc_store/
+src/data/document_store/
 src/data/vector_store/

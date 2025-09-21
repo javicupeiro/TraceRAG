@@ -1,4 +1,5 @@
 You are an assistant tasked with summarizing texts. 
+You must write in english.
 Provide a concise summary of the following text.
 
 TEXT TO SUMMARIZE:

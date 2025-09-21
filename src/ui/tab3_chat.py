@@ -21,13 +21,14 @@ def l2_distance(v1, v2):
     """Calculates L2 (Euclidean) distance between two vectors."""
     return np.linalg.norm(np.array(v1) - np.array(v2))
 
-def display_chunk(chunk: dict, key_prefix: str = ""):
+def display_chunk(chunk: dict, key_prefix: str = "", search_metric: str = "cosine"):
     """
     Display a chunk with appropriate formatting based on its type.
     
     Args:
         chunk (dict): The chunk data from database
         key_prefix (str): Unique prefix for Streamlit keys
+        search_metric (str): The search metric being used ('cosine' or 'l2')
     """
     chunk_type = chunk.get('chunk_type', 'unknown')
     chunk_id = chunk.get('id', 'unknown')
@@ -40,8 +41,9 @@ def display_chunk(chunk: dict, key_prefix: str = ""):
         with col2:
             st.write(f"**Type:** {chunk_type.title()}")
         with col3:
-            similarity = chunk.get('cosine_similarity', 0)
-            st.write(f"**Similarity:** {similarity:.3f}")
+            similarity_value = chunk.get('cosine_similarity', 0) if search_metric == 'cosine' else chunk.get('l2_distance', 0)
+            metric_label = "Similarity" if search_metric == 'cosine' else "Distance"
+            st.write(f"**{metric_label}:** {similarity_value:.3f}")
         
         # Content based on type
         if chunk_type == 'text':
@@ -214,14 +216,14 @@ def render_tab3(embedder: Embedder, vector_handler: VectorHandler, sql_handler: 
     with col3:
         # Search metric selector
         metric_options = {
-            'Cosine Similarity (IP)': 'IP',
-            'Euclidean Distance (L2)': 'L2'
+            'Cosine Similarity': 'cosine',
+            'Euclidean Distance': 'l2'
         }
         selected_metric = st.selectbox(
             "🔍 Search Metric",
             options=list(metric_options.keys()),
             index=0,
-            help="Similarity metric for document retrieval"
+            help="Similarity metric for ranking retrieved documents"
         )
         search_metric = metric_options[selected_metric]
 
@@ -246,9 +248,11 @@ def render_tab3(embedder: Embedder, vector_handler: VectorHandler, sql_handler: 
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
             if "sources" in message:
+                # Get the search metric from message metadata or use default
+                msg_search_metric = message.get("metadata", {}).get("search_metric", "cosine")
                 with st.expander("📚 View used sources"):
                     for src_idx, chunk in enumerate(message["sources"]):
-                        display_chunk(chunk, key_prefix=f"history_{msg_idx}_{src_idx}")
+                        display_chunk(chunk, key_prefix=f"history_{msg_idx}_{src_idx}", search_metric=msg_search_metric)
 
     # Handle new user input
     if query := st.chat_input("What would you like to know?"):
@@ -265,8 +269,8 @@ def render_tab3(embedder: Embedder, vector_handler: VectorHandler, sql_handler: 
                     # 1. Embed the user's query
                     query_embedding = embedder.embed([query])[0]
                     
-                    # 2. Perform vector search
-                    search_results = vector_handler.search_similar(query_embedding, k=5, metric_type=search_metric)
+                    # 2. Perform vector search (always use IP for Milvus, we'll re-rank locally)
+                    search_results = vector_handler.search_similar(query_embedding, k=10, metric_type="IP")
                     
                     if not search_results:
                         st.warning("Could not find any relevant chunks in the documents.")
@@ -275,20 +279,30 @@ def render_tab3(embedder: Embedder, vector_handler: VectorHandler, sql_handler: 
                     
                     logger.info(f"Retrieved {len(search_results)} candidate chunks.")
                     
-                    # 3. Retrieve full data and calculate all metrics
+                    # 3. Retrieve full data and calculate both metrics locally
                     retrieved_ids = [res['id'] for res in search_results]
                     vector_map = vector_handler.get_vectors_by_ids(retrieved_ids)
                     original_chunks = sql_handler.get_chunks_by_ids(retrieved_ids)
 
+                    # Calculate both similarity metrics for each chunk
                     for chunk in original_chunks:
                         chunk_vector = vector_map.get(chunk['id'])
                         if chunk_vector:
                             chunk['cosine_similarity'] = cosine_similarity(query_embedding, chunk_vector)
                             chunk['l2_distance'] = l2_distance(query_embedding, chunk_vector)
+                        else:
+                            chunk['cosine_similarity'] = 0.0
+                            chunk['l2_distance'] = float('inf')
                     
-                    sort_key = 'cosine_similarity' if search_metric == 'IP' else 'l2_distance'
-                    sort_reverse = True if search_metric == 'IP' else False
-                    original_chunks.sort(key=lambda x: x.get(sort_key, -1 if sort_reverse else float('inf')), reverse=sort_reverse)
+                    # 4. Sort by the user-selected metric
+                    if search_metric == 'cosine':
+                        original_chunks.sort(key=lambda x: x['cosine_similarity'], reverse=True)
+                        # Take top 5 after re-ranking
+                        original_chunks = original_chunks[:5]
+                    else:  # l2
+                        original_chunks.sort(key=lambda x: x['l2_distance'])
+                        # Take top 5 after re-ranking
+                        original_chunks = original_chunks[:5]
                     
                     # 4. Create LLM provider
                     with st.spinner(f"🤖 Initializing {selected_provider}..."):
@@ -326,7 +340,7 @@ def render_tab3(embedder: Embedder, vector_handler: VectorHandler, sql_handler: 
                     
                     with st.expander("📚 View used sources"):
                         for src_idx, chunk in enumerate(original_chunks):
-                            display_chunk(chunk, key_prefix=f"current_{src_idx}")
+                            display_chunk(chunk, key_prefix=f"current_{src_idx}", search_metric=search_metric)
                     
                     # 8. Add response to chat history
                     st.session_state.messages.append({
@@ -338,7 +352,8 @@ def render_tab3(embedder: Embedder, vector_handler: VectorHandler, sql_handler: 
                             "language": selected_language,
                             "model": response.model_used,
                             "tokens": response.tokens_used,
-                            "response_time": response.response_time
+                            "response_time": response.response_time,
+                            "search_metric": search_metric
                         }
                     })
                     

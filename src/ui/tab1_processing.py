@@ -4,7 +4,7 @@ import streamlit as st
 from processing.document_processor import DocumentProcessor
 from llm_provider.llm_factory import LLMProviderFactory
 from processing.multimodal_summarizer import MultimodalSummarizer
-from core.config_manager import get_document_processing_config
+from core.config_manager import get_config_manager
 from pathlib import Path
 import tempfile
 import logging
@@ -246,7 +246,7 @@ def render_single_file_processing(processor, base_prompt_dir, lang_code, provide
             st.info(f"Supported file types: {', '.join(processor.get_supported_file_types())}")
             return
 
-        if st.button(f"🚀 Process Document", use_container_width=True):
+        if st.button(f"🚀 Process Document", width="stretch"):
             # Create temporary file with correct extension
             suffix = file_extension if file_extension in ['.pdf', '.md', '.markdown'] else '.tmp'
             
@@ -416,6 +416,7 @@ def render_single_file_processing(processor, base_prompt_dir, lang_code, provide
     else:
         # Show supported file types when no file is uploaded
         st.info("📄 Please upload a document to begin processing.")
+        show_general_help(processor.get_supported_file_types())
 
 def render_batch_folder_processing(processor, base_prompt_dir, lang_code, provider_name, selected_provider, selected_language):
     """Render batch folder processing interface."""
@@ -424,12 +425,16 @@ def render_batch_folder_processing(processor, base_prompt_dir, lang_code, provid
     
     # Get document processing config
     try:
-        doc_config = get_document_processing_config()
-        default_knowledge_base = doc_config.get('knowledge_base_path', '/data/knowledge_base')
-        supported_extensions = doc_config.get('supported_extensions', ['.pdf', '.md', '.markdown'])
+        config_manager = get_config_manager()
+        # Use absolute path from project root
+        project_root = Path(__file__).parent.parent.parent  # Go up from src/ui/ to project root
+        default_knowledge_base = str(project_root / "data" / "knowledge_base")
+        supported_extensions = ['.pdf', '.md', '.markdown']
     except Exception as e:
         logger.warning(f"Could not load document processing config: {e}")
-        default_knowledge_base = '/data/knowledge_base'
+        # Fallback with absolute path
+        project_root = Path(__file__).parent.parent.parent
+        default_knowledge_base = str(project_root / "data" / "knowledge_base")
         supported_extensions = ['.pdf', '.md', '.markdown']
     
     # Folder path input
@@ -478,7 +483,7 @@ def render_batch_folder_processing(processor, base_prompt_dir, lang_code, provid
                     )
                 
                 # Process button
-                if st.button(f"🚀 Process {max_documents} Documents", use_container_width=True):
+                if st.button(f"🚀 Process {max_documents} Documents", width="stretch"):
                     try:
                         # Create LLM provider
                         with st.spinner(f"🔄 Initializing {selected_provider}..."):
@@ -537,14 +542,8 @@ def render_batch_folder_processing(processor, base_prompt_dir, lang_code, provid
         - Ensure your API keys are properly configured before starting large batches
         """)
 
-    # Show general help when no mode is active
-    if not uploaded_file and processing_mode == "Single File Upload":
-        show_general_help(supported_extensions)
-
 def show_general_help(supported_extensions):
-    """Show general help information."""
-    st.info("📄 Please upload a document or switch to batch processing mode.")
-    
+    """Show general help information."""    
     with st.expander("ℹ️ Supported File Types & Requirements", expanded=False):
         st.markdown(f"""
         **Supported document formats:**

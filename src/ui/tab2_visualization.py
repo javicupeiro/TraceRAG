@@ -125,7 +125,7 @@ def render_tab2(sql_handler: SQLHandler, vector_handler: VectorHandler):
         # The interactive dataframe for chunk selection
         selection = st.dataframe(
             df_display, on_select="rerun", selection_mode="single-row",
-            hide_index=True, use_container_width=True, key="chunk_selector"
+            hide_index=True, width="stretch", key="chunk_selector"
         )
         
         # Display details of the selected chunk
