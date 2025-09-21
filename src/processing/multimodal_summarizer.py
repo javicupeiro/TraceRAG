@@ -3,8 +3,8 @@ from pathlib import Path
 from typing import Dict
 import base64
 
-from src.llm_provider.base_llm_provider import BaseLLMProvider, LLMChunk
-from src.processing.parsers.base_parser import DocumentChunk
+from llm_provider.base_llm_provider import BaseLLMProvider, LLMChunk
+from processing.parsers.base_parser import DocumentChunk
 
 # Get a logger for the current module
 logger = logging.getLogger(__name__)

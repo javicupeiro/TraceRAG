@@ -17,17 +17,18 @@ if str(ROOT) not in sys.path:
 logger.debug(f"Project root added to system path: {ROOT}")
 
 # --- Backend Component Imports ---
-from src.core.embedder import Embedder
-from src.core.config_manager import get_config_manager
-from src.database.sql_handler import SQLHandler
-from src.database.vector_handler import VectorHandler
-from src.processing.document_processor import DocumentProcessor
-from src.llm_provider.llm_factory import LLMProviderFactory
-from src.processing.multimodal_summarizer import MultimodalSummarizer
+from core.embedder import Embedder
+from core.config_manager import get_config_manager
+from database.sql_handler import SQLHandler
+from database.vector_handler import VectorHandler
+from processing.document_processor import DocumentProcessor
+from llm_provider.llm_factory import LLMProviderFactory
+from processing.multimodal_summarizer import MultimodalSummarizer
 
 # --- UI Tab Module Imports ---
-from src.ui.tab1_processing import render_tab1
-from src.ui.tab3_chat import render_tab3
+from ui.tab1_processing import render_tab1
+from ui.tab2_visualization import render_tab2
+from ui.tab3_chat import render_tab3
 
 # --- Page Configuration ---
 st.set_page_config(
@@ -47,6 +48,17 @@ def initialize_services() -> tuple:
         tuple: A tuple containing all initialized service handlers.
     """
     logger.info("Initializing backend services...")
+    
+    # Ensure required directories exist
+    from pathlib import Path
+    data_dir = Path("data")
+    doc_store_dir = data_dir / "doc_store"
+    vector_store_dir = data_dir / "vector_store"
+    
+    # Create directories if they don't exist
+    doc_store_dir.mkdir(parents=True, exist_ok=True)
+    vector_store_dir.mkdir(parents=True, exist_ok=True)
+    logger.info("Verified data directories exist")
     
     # Get configuration
     config_manager = get_config_manager()
@@ -80,7 +92,7 @@ def initialize_services() -> tuple:
             raise Exception("No LLM provider available. Please check your API keys.")
     
     # Document Processing Logic
-    base_prompt_dir = "prompts"  # Default prompt directory
+    base_prompt_dir = "src/prompts"  # Updated path to prompts
     summarizer = MultimodalSummarizer(
         llm_provider=default_llm_provider, 
         base_prompt_dir=base_prompt_dir
@@ -186,8 +198,9 @@ def main():
         st.sidebar.info("Set GROQ_API_KEY or GEMINI_API_KEY environment variables")
     
     # --- Main Application Tabs ---
-    tab1, tab2 = st.tabs([
+    tab1, tab2, tab3 = st.tabs([
         "📄 Document Processing",
+        "📊 Chunks Visualization", 
         "💬 Chat with Documents"
     ])
 
@@ -195,6 +208,9 @@ def main():
         render_tab1(processor, base_prompt_dir)
     
     with tab2:
+        render_tab2(sql_handler, vector_handler)
+    
+    with tab3:
         render_tab3(embedder, vector_handler, sql_handler, base_prompt_dir)
 
 if __name__ == "__main__":

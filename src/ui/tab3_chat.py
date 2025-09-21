@@ -1,9 +1,9 @@
 import streamlit as st
-from src.core.embedder import Embedder
-from src.database.sql_handler import SQLHandler
-from src.database.vector_handler import VectorHandler
-from src.llm_provider.llm_factory import LLMProviderFactory
-from src.llm_provider.base_llm_provider import LLMChunk
+from core.embedder import Embedder
+from database.sql_handler import SQLHandler
+from database.vector_handler import VectorHandler
+from llm_provider.llm_factory import LLMProviderFactory
+from llm_provider.base_llm_provider import LLMChunk
 from pathlib import Path
 from typing import List, Tuple
 import numpy as np
@@ -190,7 +190,7 @@ def render_tab3(embedder: Embedder, vector_handler: VectorHandler, sql_handler: 
             'Español': 'es'
         }
         selected_language = st.selectbox(
-            "🌐 Response Language",
+            "🌍 Response Language",
             options=list(language_options.keys()),
             index=0,
             help="Language for chat responses"
@@ -200,8 +200,8 @@ def render_tab3(embedder: Embedder, vector_handler: VectorHandler, sql_handler: 
     with col2:
         # LLM Provider selector
         provider_options = {
-            'Groq (Llama)': 'groq',
-            'Google Gemini': 'gemini'
+            'Groq (llama-4-scout-17b-16e-instruct)': 'groq',
+            'Google Gemini (gemini-1.5-flash)': 'gemini'
         }
         selected_provider = st.selectbox(
             "🤖 LLM Provider",
@@ -218,7 +218,7 @@ def render_tab3(embedder: Embedder, vector_handler: VectorHandler, sql_handler: 
             'Euclidean Distance (L2)': 'L2'
         }
         selected_metric = st.selectbox(
-            "📏 Search Metric",
+            "🔍 Search Metric",
             options=list(metric_options.keys()),
             index=0,
             help="Similarity metric for document retrieval"

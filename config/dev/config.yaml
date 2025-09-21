@@ -26,3 +26,6 @@ DATABASE:
     PORT: "19530"
     COLLECTION_NAME: "md_chunks_v1" # Name for the collection in Milvus
 
+DOCUMENT_PROCESSING:
+  KNOWLEDGE_BASE_PATH: "data/knowledge_base"
+  SUPPORTED_EXTENSIONS: [".pdf", ".md", ".markdown"]

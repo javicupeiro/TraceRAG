@@ -160,7 +160,19 @@ class ConfigManager:
         
         # Finally use default
         return default
-    
+
+    def get_document_processing_config(self) -> Dict[str, Any]:
+        """
+        Get document processing configuration.
+        
+        Returns:
+            Dict[str, Any]: Document processing configuration
+        """
+        return {
+            'knowledge_base_path': self.get('DOCUMENT_PROCESSING.KNOWLEDGE_BASE_PATH'),
+            'supported_extensions': self.get('DOCUMENT_PROCESSING.SUPPORTED_EXTENSIONS', ['.pdf', '.md', '.markdown'])
+        }
+
     def reload_config(self):
         """
         Reload configuration from file.
@@ -212,11 +224,29 @@ def get_embedding_config() -> Dict[str, Any]:
     """
     return get_config_manager().get_embedding_config()
 
-def get_database_config() -> Dict[str, Any]:
+def get_database_config(self) -> Dict[str, Any]:
     """
-    Convenience function to get database configuration.
+    Get database configuration.
     
     Returns:
         Dict[str, Any]: Database configuration
     """
-    return get_config_manager().get_database_config()
+    return {
+        'sql_path': self.get('DATABASE.SQL.PATH'),
+        'milvus_host': self.get('DATABASE.MILVUS.HOST'),
+        'milvus_port': self.get('DATABASE.MILVUS.PORT'),
+        'collection_name': self.get('DATABASE.MILVUS.COLLECTION_NAME')
+    }
+
+
+def get_document_processing_config(self) -> Dict[str, Any]:
+    """
+    Get document processing configuration.
+    
+    Returns:
+        Dict[str, Any]: Document processing configuration
+    """
+    return {
+        'knowledge_base_path': self.get('DOCUMENT_PROCESSING.KNOWLEDGE_BASE_PATH'),
+        'supported_extensions': self.get('DOCUMENT_PROCESSING.SUPPORTED_EXTENSIONS', ['.pdf', '.md', '.markdown'])
+    }

@@ -4,11 +4,13 @@ from typing import List, Tuple
 import mimetypes
 
 # Local application imports
-from src.processing.parsers.base_parser import BaseParser, DocumentChunk
-from src.database.sql_handler import SQLHandler
-from src.database.vector_handler import VectorHandler
-from src.processing.multimodal_summarizer import MultimodalSummarizer
-from src.core.embedder import Embedder
+from processing.parsers.base_parser import BaseParser, DocumentChunk
+from processing.parsers.md_parser import MarkdownParser
+from processing.parsers.pdf_parser import PdfParser
+from database.sql_handler import SQLHandler
+from database.vector_handler import VectorHandler
+from processing.multimodal_summarizer import MultimodalSummarizer
+from core.embedder import Embedder
 
 # Get a logger for the current module
 logger = logging.getLogger(__name__)
