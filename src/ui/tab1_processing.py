@@ -2,6 +2,8 @@
 
 import streamlit as st
 from src.processing.document_processor import DocumentProcessor
+from src.llm_provider.llm_factory import LLMProviderFactory
+from src.processing.multimodal_summarizer import MultimodalSummarizer
 from pathlib import Path
 import tempfile
 import logging
@@ -14,16 +16,17 @@ def generate_unique_id() -> str:
     import uuid
     return str(uuid.uuid4())
 
-def render_tab1(processor: DocumentProcessor):
+def render_tab1(processor: DocumentProcessor, base_prompt_dir: str):
     """
     Renders the 'Document Processing' tab in the Streamlit UI.
 
     This tab handles the document upload and the ingestion pipeline,
     providing granular visual feedback to the user throughout the process.
-    Supports both PDF and Markdown files.
+    Supports both PDF and Markdown files with configurable LLM provider and language.
 
     Args:
         processor (DocumentProcessor): An instance of the main DocumentProcessor.
+        base_prompt_dir (str): Base directory for prompt templates.
     """
     logger.debug("Rendering Tab 1: Document Processing.")
     
@@ -33,11 +36,43 @@ def render_tab1(processor: DocumentProcessor):
     generate a descriptive summary for each, and store them in the databases.
     """)
 
-    # Get language from the global session state
-    lang_code = st.session_state.get('language', 'en')
-    lang_name = "Español" if lang_code == "es" else "English"
+    # Configuration Section
+    st.subheader("🔧 Configuration")
     
-    st.info(f"Summaries will be generated in **{lang_name}**. You can change this in the sidebar settings.")
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        # Language selector
+        language_options = {
+            'English': 'en',
+            'Español': 'es'
+        }
+        selected_language = st.selectbox(
+            "📝 Summary Language",
+            options=list(language_options.keys()),
+            index=0,
+            help="Language for generating summaries"
+        )
+        lang_code = language_options[selected_language]
+    
+    with col2:
+        # LLM Provider selector
+        provider_options = {
+            'Groq (Llama)': 'groq',
+            'Google Gemini': 'gemini'
+        }
+        selected_provider = st.selectbox(
+            "🤖 LLM Provider",
+            options=list(provider_options.keys()),
+            index=0,
+            help="Choose the language model provider for summarization"
+        )
+        provider_name = provider_options[selected_provider]
+    
+    # Show current configuration
+    st.info(f"📋 **Current Setup:** {selected_provider} | {selected_language} summaries")
+    
+    st.divider()
 
     # File uploader supporting both PDF and Markdown
     uploaded_file = st.file_uploader(
@@ -59,7 +94,7 @@ def render_tab1(processor: DocumentProcessor):
             st.info(f"Supported file types: {', '.join(processor.get_supported_file_types())}")
             return
 
-        if st.button(f"🚀 Process Document in {lang_name}", use_container_width=True):
+        if st.button(f"🚀 Process Document", use_container_width=True):
             # Create temporary file with correct extension
             suffix = file_extension if file_extension in ['.pdf', '.md', '.markdown'] else '.tmp'
             
@@ -67,15 +102,42 @@ def render_tab1(processor: DocumentProcessor):
                 tmp_file.write(uploaded_file.getvalue())
                 file_path = Path(tmp_file.name)
             
-            logger.info(f"User uploaded file '{uploaded_file.name}'. Starting processing.")
+            logger.info(f"User uploaded file '{uploaded_file.name}'. Processing with {provider_name} in {lang_code}")
             
             try:
-                # Set the summarizer language before processing
-                processor.summarizer.set_language(lang_code)
+                # Create LLM provider based on user selection
+                with st.spinner(f"🔄 Initializing {selected_provider}..."):
+                    try:
+                        llm_provider = LLMProviderFactory.create_provider(provider_name)
+                        logger.info(f"Successfully created {provider_name} provider")
+                    except Exception as e:
+                        st.error(f"❌ Failed to initialize {selected_provider}: {str(e)}")
+                        st.error("Please check your API keys in environment variables")
+                        logger.error(f"Failed to create {provider_name} provider: {e}")
+                        return
+                
+                # Create new summarizer with selected provider and language
+                summarizer = MultimodalSummarizer(llm_provider, base_prompt_dir)
+                summarizer.set_language(lang_code)
+                
+                # Update processor's summarizer
+                original_summarizer = processor.summarizer
+                processor.summarizer = summarizer
 
                 with st.status("⚙️ Processing document...", expanded=True) as status:
                     # Phase 1: Parsing
                     status.update(label="Phase 1/3: Parsing document into chunks...", state="running")
+                    st.write("📄 Extracting content from document...")
+                    
+                    # Phase 2: Summarization
+                    status.update(label="Phase 2/3: Generating summaries...", state="running")
+                    st.write(f"🤖 Using {selected_provider} for {selected_language} summaries...")
+                    
+                    # Phase 3: Embedding
+                    status.update(label="Phase 3/3: Creating embeddings...", state="running")
+                    st.write("🔢 Converting summaries to vector embeddings...")
+                    
+                    # Process document
                     original_chunks, summaries, summary_vectors = processor.process_document(file_path)
                     
                     if not original_chunks:
@@ -86,7 +148,10 @@ def render_tab1(processor: DocumentProcessor):
                     total_chunks = len(original_chunks)
                     logger.info(f"Processing complete. Found {total_chunks} chunks.")
                     
-                    status.update(label="Processing complete.", state="complete", expanded=False)
+                    status.update(label="✅ Processing complete.", state="complete", expanded=False)
+
+                # Restore original summarizer
+                processor.summarizer = original_summarizer
 
                 # Display document analysis summary
                 counts = {"text": 0, "table": 0, "image": 0, "code": 0}
@@ -148,7 +213,7 @@ def render_tab1(processor: DocumentProcessor):
 
                 # Show some statistics
                 with st.expander("📊 Processing Statistics", expanded=False):
-                    col1, col2, col3 = st.columns(3)
+                    col1, col2, col3, col4 = st.columns(4)
                     
                     with col1:
                         st.metric("Total Chunks", total_chunks)
@@ -162,22 +227,45 @@ def render_tab1(processor: DocumentProcessor):
                         st.metric("Image Chunks", counts["image"])
                         if counts["code"] > 0:
                             st.metric("Code Chunks", counts["code"])
+                    
+                    with col4:
+                        st.metric("LLM Provider", selected_provider)
+                        st.metric("Language", selected_language)
 
             except Exception as e:
                 st.error(f"An error occurred during processing: {e}")
                 logger.error(f"Failed to process document '{uploaded_file.name}'.", exc_info=True)
+                
+                # Show troubleshooting tips
+                with st.expander("🔧 Troubleshooting", expanded=True):
+                    st.markdown(f"""
+                    **Common issues with {selected_provider}:**
+                    
+                    - **API Key Missing**: Make sure you have set the `{provider_name.upper()}_API_KEY` environment variable
+                    - **Rate Limits**: Try again in a few moments if you're hitting rate limits
+                    - **Network Issues**: Check your internet connection
+                    - **File Format**: Ensure your document is in a supported format
+                    
+                    **Environment Variables Required:**
+                    - For Groq: `GROQ_API_KEY`
+                    - For Gemini: `GEMINI_API_KEY`
+                    """)
                 
             finally:
                 # Clean up temporary file
                 if 'file_path' in locals() and file_path.exists():
                     file_path.unlink()
                     logger.debug(f"Removed temporary file: {file_path}")
+                
+                # Restore original summarizer if it was changed
+                if 'original_summarizer' in locals():
+                    processor.summarizer = original_summarizer
 
     else:
         # Show supported file types when no file is uploaded
         st.info("📁 Please upload a document to begin processing.")
         
-        with st.expander("ℹ️ Supported File Types", expanded=False):
+        with st.expander("ℹ️ Supported File Types & Requirements", expanded=False):
             st.markdown("""
             **Supported document formats:**
             - **PDF files** (.pdf) - Extracts text, tables, and images
@@ -189,4 +277,32 @@ def render_tab1(processor: DocumentProcessor):
             - Image processing and base64 conversion
             - Code block detection (Markdown only)
             - Multilingual summarization support
+            
+            **Requirements:**
+            - **For Groq**: Set `GROQ_API_KEY` environment variable
+            - **For Gemini**: Set `GEMINI_API_KEY` environment variable
+            
+            **Supported Languages:**
+            - **English**: All features fully supported
+            - **Español**: Complete Spanish summarization support
             """)
+        
+        # Show API key status
+        with st.expander("🔑 API Key Status", expanded=False):
+            import os
+            
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                groq_key = os.getenv('GROQ_API_KEY')
+                if groq_key:
+                    st.success("✅ Groq API Key: Configured")
+                else:
+                    st.error("❌ Groq API Key: Missing")
+            
+            with col2:
+                gemini_key = os.getenv('GEMINI_API_KEY')
+                if gemini_key:
+                    st.success("✅ Gemini API Key: Configured")
+                else:
+                    st.error("❌ Gemini API Key: Missing")
