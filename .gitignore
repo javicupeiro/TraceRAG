@@ -40,5 +40,4 @@ notebooks/
 scripts/
 
 src/ui/
-src/core/
 src/data/vector_store/
