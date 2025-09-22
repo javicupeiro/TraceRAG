@@ -1,0 +1,133 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "pattern": "^user_[0-9]{3}_[a-z_]+$",
+      "description": "Unique identifier: user_001_startup_founder"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "created_at": {"type": "string", "format": "date-time"},
+        "last_updated": {"type": "string", "format": "date-time"},
+        "version": {"type": "string", "default": "1.0"}
+      },
+      "required": ["created_at"]
+    },
+    "profile": {
+      "type": "object",
+      "properties": {
+        "name": {"type": "string"},
+        "role": {"type": "string"},
+        "company_type": {
+          "type": "string",
+          "enum": ["startup", "scale_up", "enterprise", "agency", "freelancer"]
+        },
+        "industry": {"type": "string"},
+        "experience_level": {
+          "type": "string",
+          "enum": ["junior", "mid", "senior", "lead", "executive"]
+        },
+        "main_interests": {
+          "type": "array",
+          "items": {"type": "string"},
+          "maxItems": 5
+        },
+        "pain_points": {
+          "type": "array", 
+          "items": {"type": "string"},
+          "maxItems": 5
+        }
+      },
+      "required": ["name", "role", "company_type"]
+    },
+    "query_history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "query_id": {"type": "string"},
+          "query": {"type": "string"},
+          "timestamp": {"type": "string", "format": "date-time"},
+          "category": {
+            "type": "string",
+            "enum": [
+              "platform_overview", "hiring_process", "ai_capabilities", 
+              "talent_discovery", "squad_capabilities", "work_culture",
+              "competitive_analysis", "company_metrics", "legal_compliance",
+              "use_cases", "pricing", "technical_skills"
+            ]
+          },
+          "intent": {
+            "type": "string",
+            "enum": [
+              "information_seeking", "decision_support", "problem_solving",
+              "validation_seeking", "comparison", "troubleshooting"
+            ]
+          },
+          "satisfaction": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5,
+            "description": "User satisfaction with response (1-5)"
+          }
+        },
+        "required": ["query_id", "query", "timestamp", "category", "intent"]
+      }
+    },
+    "computed_profile": {
+      "type": "object",
+      "description": "Auto-computed from query history",
+      "properties": {
+        "interest_scores": {
+          "type": "object",
+          "patternProperties": {
+            "^[a-z_]+$": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          }
+        },
+        "engagement_pattern": {
+          "type": "string",
+          "enum": ["explorer", "focused", "decision_maker", "researcher"]
+        },
+        "complexity_preference": {
+          "type": "string", 
+          "enum": ["basic", "intermediate", "advanced"]
+        },
+        "recency_bias": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "How much recent queries matter vs historical"
+        }
+      }
+    },
+    "preferences": {
+      "type": "object",
+      "properties": {
+        "content_types": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["article", "tutorial", "case_study", "documentation", "video", "tool"]
+          }
+        },
+        "difficulty_level": {
+          "type": "string",
+          "enum": ["beginner", "intermediate", "advanced", "expert"]
+        },
+        "language": {
+          "type": "string",
+          "enum": ["en", "es"],
+          "default": "en"
+        }
+      }
+    }
+  },
+  "required": ["user_id", "metadata", "profile", "query_history"]
+}

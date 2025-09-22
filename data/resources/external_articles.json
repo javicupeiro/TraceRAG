@@ -1,0 +1,151 @@
+[
+  {
+    "resource_id": "article_001_remote_dev_hiring",
+    "metadata": {
+      "created_at": "2024-11-01T10:00:00Z",
+      "source": "external_article",
+      "language": "en"
+    },
+    "content": {
+      "title": "The Complete Guide to Hiring Remote Developers in 2024",
+      "summary": "Comprehensive guide covering technical assessment, cultural fit evaluation, and onboarding best practices for remote development teams. Includes salary benchmarks and common hiring mistakes to avoid.",
+      "url": "https://techleadjournal.dev/remote-hiring-guide-2024",
+      "type": "article"
+    },
+    "categorization": {
+      "primary_category": "hiring_guidance", 
+      "secondary_categories": ["technical_integration", "talent_management"],
+      "tags": ["remote work", "developer hiring", "technical assessment", "onboarding"],
+      "difficulty_level": "intermediate",
+      "target_roles": ["founder", "cto", "hr_manager"]
+    },
+    "recommendation_metadata": {
+      "popularity_score": 0.85,
+      "quality_score": 0.90,
+      "freshness_score": 0.95,
+      "avg_user_rating": 4.3,
+      "view_count": 12500,
+      "recommendation_count": 89
+    },
+    "relations": {
+      "related_resources": ["tutorial_002_technical_interviews", "article_003_freelancer_contracts"],
+      "follow_up_resources": ["article_002_freelancer_vs_employee"]
+    }
+  },
+  {
+    "resource_id": "article_002_freelancer_vs_employee",
+    "metadata": {
+      "created_at": "2024-10-15T14:30:00Z",
+      "source": "external_article", 
+      "language": "en"
+    },
+    "content": {
+      "title": "Freelancers vs Full-Time Employees: When to Choose What",
+      "summary": "Strategic analysis of when to hire freelancers versus employees, covering cost implications, project types, legal considerations, and management overhead. Includes decision framework and real case studies.",
+      "url": "https://businessstrategy.com/freelancer-vs-employee-guide",
+      "type": "article"
+    },
+    "categorization": {
+      "primary_category": "business_intelligence",
+      "secondary_categories": ["hiring_guidance", "legal_contracts"], 
+      "tags": ["freelancer benefits", "employment law", "cost analysis", "project management"],
+      "difficulty_level": "advanced",
+      "target_roles": ["founder", "hr_manager", "product_manager"]
+    },
+    "recommendation_metadata": {
+      "popularity_score": 0.78,
+      "quality_score": 0.88,
+      "freshness_score": 0.82,
+      "avg_user_rating": 4.1,
+      "view_count": 8900,
+      "recommendation_count": 67
+    }
+  },
+  {
+    "resource_id": "article_003_freelancer_contracts",
+    "metadata": {
+      "created_at": "2024-09-20T09:15:00Z",
+      "source": "external_article",
+      "language": "es"
+    },
+    "content": {
+      "title": "Contratos para Freelancers: Guía Legal Completa 2024",
+      "summary": "Guía completa sobre aspectos legales de contratar freelancers en España: tipos de contratos, derechos y obligaciones, facturación, seguros, y cláusulas de confidencialidad. Incluye plantillas descargables.",
+      "url": "https://freelancerlegal.es/contratos-completos",
+      "type": "article"
+    },
+    "categorization": {
+      "primary_category": "legal_contracts",
+      "secondary_categories": ["hiring_guidance"],
+      "tags": ["contratos", "freelancer legal", "facturación", "confidencialidad", "España"],
+      "difficulty_level": "advanced", 
+      "target_roles": ["founder", "hr_manager"]
+    },
+    "recommendation_metadata": {
+      "popularity_score": 0.72,
+      "quality_score": 0.85,
+      "freshness_score": 0.88,
+      "avg_user_rating": 4.4,
+      "view_count": 5600,
+      "recommendation_count": 45
+    }
+  },
+  {
+    "resource_id": "article_004_creative_freelancing",
+    "metadata": {
+      "created_at": "2024-11-10T16:20:00Z",
+      "source": "external_article",
+      "language": "en"
+    },
+    "content": {
+      "title": "Building Creative Squads: Designers, Writers, and Artists Collaboration",
+      "summary": "How to assemble and manage creative teams with mixed disciplines. Covers creative brief writing, feedback loops, version control for creative assets, and maintaining creative vision across distributed teams.",
+      "url": "https://creativemanagement.io/building-creative-squads",
+      "type": "article"
+    },
+    "categorization": {
+      "primary_category": "team_building",
+      "secondary_categories": ["talent_management", "use_cases"],
+      "tags": ["creative teams", "design squads", "creative management", "collaboration"],
+      "difficulty_level": "intermediate",
+      "target_roles": ["marketing_director", "product_manager"]
+    },
+    "recommendation_metadata": {
+      "popularity_score": 0.68,
+      "quality_score": 0.79,
+      "freshness_score": 0.92,
+      "avg_user_rating": 3.9,
+      "view_count": 4200,
+      "recommendation_count": 31
+    }
+  },
+  {
+    "resource_id": "article_005_ai_freelancing_future",
+    "metadata": {
+      "created_at": "2024-11-25T11:45:00Z",
+      "source": "external_article",
+      "language": "en"
+    },
+    "content": {
+      "title": "AI and the Future of Freelancing: Opportunities and Challenges",
+      "summary": "Analysis of how AI tools are transforming freelance work. Covers AI-assisted coding, design automation, content creation, and how platforms are using AI for better matching. Practical advice for staying competitive.",
+      "url": "https://futureofwork.tech/ai-freelancing-evolution", 
+      "type": "article"
+    },
+    "categorization": {
+      "primary_category": "ai_features",
+      "secondary_categories": ["business_intelligence", "platform_basics"],
+      "tags": ["artificial intelligence", "future of work", "automation", "skill evolution"],
+      "difficulty_level": "advanced",
+      "target_roles": ["founder", "cto", "product_manager"]
+    },
+    "recommendation_metadata": {
+      "popularity_score": 0.91,
+      "quality_score": 0.87,
+      "freshness_score": 0.98,
+      "avg_user_rating": 4.5,
+      "view_count": 15800,
+      "recommendation_count": 124
+    }
+  }
+]

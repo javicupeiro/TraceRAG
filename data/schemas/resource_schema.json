@@ -1,0 +1,126 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "resource_id": {
+      "type": "string",
+      "pattern": "^(chunk|article|tutorial|doc)_[0-9a-f\\-]+$"
+    },
+    "metadata": {
+      "type": "object", 
+      "properties": {
+        "created_at": {"type": "string", "format": "date-time"},
+        "last_updated": {"type": "string", "format": "date-time"},
+        "source": {
+          "type": "string",
+          "enum": ["internal_chunk", "external_article", "tutorial", "documentation"]
+        },
+        "language": {"type": "string", "enum": ["en", "es"], "default": "en"}
+      },
+      "required": ["created_at", "source"]
+    },
+    "content": {
+      "type": "object",
+      "properties": {
+        "title": {"type": "string"},
+        "summary": {"type": "string", "maxLength": 500},
+        "full_content": {"type": "string"},
+        "url": {"type": "string", "format": "uri"},
+        "type": {
+          "type": "string",
+          "enum": ["text", "table", "image", "code", "video", "tool"]
+        }
+      },
+      "required": ["title", "summary", "type"]
+    },
+    "categorization": {
+      "type": "object",
+      "properties": {
+        "primary_category": {
+          "type": "string",
+          "enum": [
+            "platform_basics", "hiring_guidance", "ai_features", "talent_management",
+            "team_building", "work_culture", "business_intelligence", "legal_contracts",
+            "use_cases", "pricing_models", "technical_integration"
+          ]
+        },
+        "secondary_categories": {
+          "type": "array",
+          "items": {"type": "string"},
+          "maxItems": 3
+        },
+        "tags": {
+          "type": "array",
+          "items": {"type": "string"},
+          "maxItems": 10
+        },
+        "difficulty_level": {
+          "type": "string",
+          "enum": ["beginner", "intermediate", "advanced", "expert"]
+        },
+        "target_roles": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["founder", "cto", "product_manager", "marketing_director", "hr_manager", "developer"]
+          }
+        }
+      },
+      "required": ["primary_category", "difficulty_level"]
+    },
+    "recommendation_metadata": {
+      "type": "object",
+      "properties": {
+        "embedding_vector": {
+          "type": "array",
+          "items": {"type": "number"},
+          "description": "Pre-computed embedding for similarity search"
+        },
+        "popularity_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "quality_score": {
+          "type": "number", 
+          "minimum": 0,
+          "maximum": 1
+        },
+        "freshness_score": {
+          "type": "number",
+          "minimum": 0, 
+          "maximum": 1,
+          "description": "How current/relevant the content is"
+        },
+        "avg_user_rating": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "view_count": {"type": "integer", "minimum": 0},
+        "recommendation_count": {"type": "integer", "minimum": 0}
+      }
+    },
+    "relations": {
+      "type": "object",
+      "properties": {
+        "prerequisites": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Resource IDs that should be consumed first"
+        },
+        "related_resources": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Resource IDs of related content"
+        },
+        "follow_up_resources": {
+          "type": "array", 
+          "items": {"type": "string"},
+          "description": "What to read next"
+        }
+      }
+    }
+  },
+  "required": ["resource_id", "metadata", "content", "categorization"]
+}

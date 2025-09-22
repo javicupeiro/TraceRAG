@@ -1,0 +1,55 @@
+{
+  "user_id": "user_002_marketing_director",
+  "metadata": {
+    "created_at": "2024-10-20T08:00:00Z",
+    "last_updated": "2024-11-12T16:40:00Z",
+    "version": "1.0"
+  },
+  "profile": {
+    "name": "Carlos Ruiz",
+    "role": "Marketing Director",
+    "company_type": "enterprise",
+    "industry": "E-commerce",
+    "experience_level": "senior",
+    "main_interests": ["performance_marketing", "growth_squads"],
+    "pain_points": ["scaling_campaigns", "finding_specialists"]
+  },
+  "query_history": [
+    {
+      "query_id": "q_001",
+      "query": "¿Qué tipos de perfiles de marketing tiene disponibles Shakers?",
+      "timestamp": "2024-10-22T09:15:00Z",
+      "category": "talent_discovery",
+      "intent": "information_seeking"
+    },
+    {
+      "query_id": "q_002", 
+      "query": "¿Un squad de marketing puede manejar performance y content?",
+      "timestamp": "2024-10-25T15:30:00Z",
+      "category": "squad_capabilities",
+      "intent": "decision_support"
+    },
+    {
+      "query_id": "q_003",
+      "query": "¿Cómo medir el ROI de campañas con freelancers externos?",
+      "timestamp": "2024-11-05T14:45:00Z",
+      "category": "use_cases", 
+      "intent": "problem_solving"
+    }
+  ],
+  "computed_profile": {
+    "interest_scores": {
+      "talent_discovery": 0.8,
+      "squad_capabilities": 0.7,
+      "use_cases": 0.6
+    },
+    "engagement_pattern": "focused",
+    "complexity_preference": "intermediate",
+    "recency_bias": 0.6
+  },
+  "preferences": {
+    "content_types": ["case_study", "tutorial"],
+    "difficulty_level": "intermediate",
+    "language": "es"
+  }
+}

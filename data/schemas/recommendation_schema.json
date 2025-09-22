@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "recommendation_id": {"type": "string"},
+    "user_id": {"type": "string"},
+    "timestamp": {"type": "string", "format": "date-time"},
+    "context": {
+      "type": "object",
+      "properties": {
+        "trigger_query": {"type": "string"},
+        "session_id": {"type": "string"},
+        "algorithm_version": {"type": "string"}
+      }
+    },
+    "recommendations": {
+      "type": "array",
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "properties": {
+          "resource_id": {"type": "string"},
+          "rank": {"type": "integer", "minimum": 1},
+          "scores": {
+            "type": "object",
+            "properties": {
+              "relevance_score": {"type": "number", "minimum": 0, "maximum": 1},
+              "diversity_score": {"type": "number", "minimum": 0, "maximum": 1},
+              "novelty_score": {"type": "number", "minimum": 0, "maximum": 1},
+              "confidence_score": {"type": "number", "minimum": 0, "maximum": 1},
+              "final_score": {"type": "number", "minimum": 0, "maximum": 1}
+            },
+            "required": ["relevance_score", "final_score"]
+          },
+          "explanation": {
+            "type": "object",
+            "properties": {
+              "primary_reason": {"type": "string"},
+              "detailed_explanation": {"type": "string"},
+              "confidence_level": {
+                "type": "string", 
+                "enum": ["high", "medium", "low"]
+              }
+            },
+            "required": ["primary_reason", "detailed_explanation"]
+          }
+        },
+        "required": ["resource_id", "rank", "scores", "explanation"]
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "diversity_score": {"type": "number", "minimum": 0, "maximum": 1},
+        "coverage_score": {"type": "number", "minimum": 0, "maximum": 1},
+        "algorithm_params": {"type": "object"},
+        "execution_time_ms": {"type": "number"}
+      }
+    }
+  },
+  "required": ["recommendation_id", "user_id", "timestamp", "recommendations"]
+}

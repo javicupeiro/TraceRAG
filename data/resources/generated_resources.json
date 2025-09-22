@@ -1,0 +1,152 @@
+[
+  {
+    "resource_id": "chunk_gen_001_shakers_overview",
+    "metadata": {
+      "created_at": "2024-12-01T08:00:00Z",
+      "source": "internal_chunk",
+      "language": "es"
+    },
+    "content": {
+      "title": "Qué es Shakers y cómo funciona la plataforma",
+      "summary": "Shakers es una plataforma de talento independiente que combina IA con una comunidad curada de freelancers para acelerar la contratación. Ofrece modalidades de freelancers individuales y squads completos con validación multidimensional.",
+      "full_content": "Shakers es una plataforma de talento independiente (freelance) creada para ayudar a empresas y profesionales a colaborar en proyectos de alto impacto...",
+      "type": "text"
+    },
+    "categorization": {
+      "primary_category": "platform_basics",
+      "secondary_categories": ["hiring_guidance"],
+      "tags": ["shakers", "plataforma", "freelancing", "ia", "squads"],
+      "difficulty_level": "beginner",
+      "target_roles": ["founder", "hr_manager", "product_manager"]
+    },
+    "recommendation_metadata": {
+      "embedding_vector": [0.1, -0.3, 0.7, 0.2, -0.1],
+      "popularity_score": 0.95,
+      "quality_score": 0.92, 
+      "freshness_score": 1.0,
+      "avg_user_rating": 4.7,
+      "view_count": 18500,
+      "recommendation_count": 156
+    }
+  },
+  {
+    "resource_id": "chunk_gen_002_hiring_process",
+    "metadata": {
+      "created_at": "2024-12-01T08:15:00Z",
+      "source": "internal_chunk",
+      "language": "es"
+    },
+    "content": {
+      "title": "Proceso completo de contratación en Shakers",
+      "summary": "Guía del proceso desde definir el proyecto hasta el kickoff final. Incluye cómo usar Shakers AI para estructurar briefs, generar shortlists, realizar entrevistas y cerrar la contratación sin fricciones.",
+      "full_content": "Este documento describe, desde la perspectiva de la empresa, cómo funciona el proceso típico de contratación en Shakers...",
+      "type": "text"
+    },
+    "categorization": {
+      "primary_category": "hiring_guidance",
+      "secondary_categories": ["ai_features", "platform_basics"],
+      "tags": ["proceso contratación", "shakers ai", "brief", "entrevistas", "kickoff"],
+      "difficulty_level": "intermediate",
+      "target_roles": ["founder", "hr_manager", "product_manager"]
+    },
+    "recommendation_metadata": {
+      "embedding_vector": [0.3, 0.1, -0.2, 0.8, 0.4],
+      "popularity_score": 0.88,
+      "quality_score": 0.90,
+      "freshness_score": 1.0,
+      "avg_user_rating": 4.5,
+      "view_count": 14200,
+      "recommendation_count": 127
+    }
+  },
+  {
+    "resource_id": "chunk_gen_003_shakers_ai",
+    "metadata": {
+      "created_at": "2024-12-01T08:30:00Z",
+      "source": "internal_chunk", 
+      "language": "es"
+    },
+    "content": {
+      "title": "Shakers AI: copiloto para definir proyectos",
+      "summary": "Shakers AI elimina fricción en la definición de proyectos mediante estructura de briefs guiada, estimaciones de coste basadas en datos de mercado, y recomendaciones dinámicas de talento que se actualizan al cambiar parámetros.",
+      "full_content": "Shakers AI es el módulo de IA de la plataforma. Su objetivo: eliminar fricción en la definición del proyecto y acelerar el matching...",
+      "type": "text"
+    },
+    "categorization": {
+      "primary_category": "ai_features",
+      "secondary_categories": ["platform_basics", "hiring_guidance"],
+      "tags": ["inteligencia artificial", "automatización", "brief", "estimaciones", "matching"],
+      "difficulty_level": "intermediate",
+      "target_roles": ["founder", "cto", "product_manager"]
+    },
+    "recommendation_metadata": {
+      "embedding_vector": [-0.1, 0.6, 0.2, -0.4, 0.9],
+      "popularity_score": 0.91,
+      "quality_score": 0.94,
+      "freshness_score": 1.0,
+      "avg_user_rating": 4.6,
+      "view_count": 16800,
+      "recommendation_count": 142
+    }
+  },
+  {
+    "resource_id": "chunk_gen_004_company_culture", 
+    "metadata": {
+      "created_at": "2024-12-01T08:45:00Z",
+      "source": "internal_chunk",
+      "language": "es"
+    },
+    "content": {
+      "title": "Cultura y beneficios de trabajar en Shakers",
+      "summary": "Shakers promueve Full Flex permitiendo decidir dónde y cuándo trabajar, con oficinas en Utopicus y beneficios como gimnasio, seguro médico, Cobee y clases de idiomas. Plan de crecimiento acelerado incluido.",
+      "full_content": "Shakers promueve Full Flex (decides dónde y cuándo trabajar) y menciona oficinas en Utopicus...",
+      "type": "text"
+    },
+    "categorization": {
+      "primary_category": "work_culture", 
+      "secondary_categories": ["platform_basics"],
+      "tags": ["cultura empresa", "full flex", "beneficios", "oficinas", "crecimiento"],
+      "difficulty_level": "beginner",
+      "target_roles": ["hr_manager", "founder"]
+    },
+    "recommendation_metadata": {
+      "embedding_vector": [0.5, -0.2, 0.1, 0.3, -0.7],
+      "popularity_score": 0.73,
+      "quality_score": 0.85,
+      "freshness_score": 1.0, 
+      "avg_user_rating": 4.1,
+      "view_count": 9800,
+      "recommendation_count": 87
+    }
+  },
+  {
+    "resource_id": "chunk_gen_005_squads_benefits",
+    "metadata": {
+      "created_at": "2024-12-01T09:00:00Z",
+      "source": "internal_chunk",
+      "language": "es"
+    },
+    "content": {
+      "title": "Squads vs Freelancers individuales: cuándo elegir cada opción",
+      "summary": "Los squads son equipos coordinados listos para proyectos end-to-end con velocidad y menos handoffs. Ideal para MVPs, replatforming y sprints de crecimiento que requieren múltiples disciplinas trabajando juntas.",
+      "full_content": "Además de contratar freelancers individuales, Shakers permite postular y contratar squads...",
+      "type": "text"
+    },
+    "categorization": {
+      "primary_category": "team_building",
+      "secondary_categories": ["hiring_guidance", "use_cases"], 
+      "tags": ["squads", "equipos", "multidisciplinar", "mvp", "coordinación"],
+      "difficulty_level": "intermediate",
+      "target_roles": ["founder", "product_manager", "cto"]
+    },
+    "recommendation_metadata": {
+      "embedding_vector": [0.2, 0.4, -0.1, 0.7, 0.3],
+      "popularity_score": 0.79,
+      "quality_score": 0.87,
+      "freshness_score": 1.0,
+      "avg_user_rating": 4.4,
+      "view_count": 11600,
+      "recommendation_count": 98
+    }
+  }
+]

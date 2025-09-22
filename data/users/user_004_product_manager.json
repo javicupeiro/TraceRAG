@@ -1,0 +1,63 @@
+{
+  "user_id": "user_004_product_manager",
+  "metadata": {
+    "created_at": "2024-08-15T12:00:00Z", 
+    "last_updated": "2024-09-25T15:55:00Z",
+    "version": "1.0"
+  },
+  "profile": {
+    "name": "David Chen",
+    "role": "Senior Product Manager",
+    "company_type": "scale_up",
+    "industry": "EdTech",
+    "experience_level": "senior",
+    "main_interests": ["ai_features", "product_development"],
+    "pain_points": ["feature_prioritization", "market_validation"]
+  },
+  "query_history": [
+    {
+      "query_id": "q_001",
+      "query": "¿Qué es Shakers y cómo funciona?",
+      "timestamp": "2024-08-16T09:30:00Z",
+      "category": "platform_overview", 
+      "intent": "information_seeking"
+    },
+    {
+      "query_id": "q_002",
+      "query": "¿Cómo ayuda Shakers AI en definir proyectos?",
+      "timestamp": "2024-08-22T14:20:00Z",
+      "category": "ai_capabilities",
+      "intent": "information_seeking"
+    },
+    {
+      "query_id": "q_003",
+      "query": "¿Cuáles son las métricas de tracción de Shakers?",
+      "timestamp": "2024-08-28T11:45:00Z",
+      "category": "company_metrics",
+      "intent": "validation_seeking"
+    },
+    {
+      "query_id": "q_004",
+      "query": "¿Puedo contratar un UX researcher con Shakers?",
+      "timestamp": "2024-09-25T15:55:00Z",
+      "category": "talent_discovery",
+      "intent": "decision_support"
+    }
+  ],
+  "computed_profile": {
+    "interest_scores": {
+      "platform_overview": 0.5,
+      "ai_capabilities": 0.8,
+      "company_metrics": 0.6,
+      "talent_discovery": 0.7
+    },
+    "engagement_pattern": "researcher", 
+    "complexity_preference": "advanced",
+    "recency_bias": 0.7
+  },
+  "preferences": {
+    "content_types": ["article", "case_study", "tool"],
+    "difficulty_level": "advanced",
+    "language": "en"
+  }
+}

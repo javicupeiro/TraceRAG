@@ -1,0 +1,126 @@
+[
+  {
+    "resource_id": "tutorial_001_first_freelancer",
+    "metadata": {
+      "created_at": "2024-10-05T13:30:00Z",
+      "source": "tutorial",
+      "language": "es"
+    },
+    "content": {
+      "title": "Cómo Contratar tu Primer Freelancer: Paso a Paso",
+      "summary": "Tutorial práctico de 7 pasos para empresas que nunca han contratado freelancers. Desde definir el proyecto hasta el primer pago, incluyendo plantillas de brief y checklist de evaluación.",
+      "url": "https://shakersacademy.com/primer-freelancer-tutorial",
+      "type": "tutorial"
+    },
+    "categorization": {
+      "primary_category": "hiring_guidance",
+      "secondary_categories": ["platform_basics"],
+      "tags": ["primer proyecto", "tutorial básico", "freelancer", "contratación"],
+      "difficulty_level": "beginner",
+      "target_roles": ["founder", "hr_manager"]
+    },
+    "recommendation_metadata": {
+      "popularity_score": 0.82,
+      "quality_score": 0.88,
+      "freshness_score": 0.85,
+      "avg_user_rating": 4.2,
+      "view_count": 7800,
+      "recommendation_count": 92
+    },
+    "relations": {
+      "prerequisites": [],
+      "follow_up_resources": ["tutorial_002_technical_interviews", "article_001_remote_dev_hiring"]
+    }
+  },
+  {
+    "resource_id": "tutorial_002_technical_interviews",
+    "metadata": {
+      "created_at": "2024-10-12T10:15:00Z", 
+      "source": "tutorial",
+      "language": "en"
+    },
+    "content": {
+      "title": "Technical Interview Framework for Freelance Developers",
+      "summary": "Step-by-step guide to conducting effective technical interviews for freelance developers. Includes coding challenges, system design questions, and evaluation rubrics for different seniority levels.",
+      "url": "https://devhiring.pro/technical-interview-framework",
+      "type": "tutorial"
+    },
+    "categorization": {
+      "primary_category": "technical_integration",
+      "secondary_categories": ["hiring_guidance"],
+      "tags": ["technical interviews", "coding challenges", "developer evaluation", "assessment"],
+      "difficulty_level": "intermediate",
+      "target_roles": ["cto", "developer"]
+    },
+    "recommendation_metadata": {
+      "popularity_score": 0.75,
+      "quality_score": 0.91,
+      "freshness_score": 0.87,
+      "avg_user_rating": 4.6,
+      "view_count": 6200,
+      "recommendation_count": 78
+    },
+    "relations": {
+      "prerequisites": ["tutorial_001_first_freelancer"],
+      "related_resources": ["article_001_remote_dev_hiring"]
+    }
+  },
+  {
+    "resource_id": "tutorial_003_squad_management",
+    "metadata": {
+      "created_at": "2024-11-02T15:45:00Z",
+      "source": "tutorial", 
+      "language": "es"
+    },
+    "content": {
+      "title": "Gestión de Squads Multidisciplinares: Manual Práctico",
+      "summary": "Guía completa para coordinar equipos freelance multidisciplinares. Metodologías ágiles adaptadas, herramientas de colaboración, resolución de conflictos y métricas de rendimiento para squads.",
+      "url": "https://squadmanagement.es/gestion-equipos-freelance",
+      "type": "tutorial"
+    },
+    "categorization": {
+      "primary_category": "team_building",
+      "secondary_categories": ["talent_management", "use_cases"],
+      "tags": ["gestión de equipos", "squads", "metodología ágil", "coordinación"],
+      "difficulty_level": "advanced", 
+      "target_roles": ["product_manager", "marketing_director"]
+    },
+    "recommendation_metadata": {
+      "popularity_score": 0.69,
+      "quality_score": 0.83,
+      "freshness_score": 0.93,
+      "avg_user_rating": 4.0,
+      "view_count": 4100,
+      "recommendation_count": 52
+    }
+  },
+  {
+    "resource_id": "tutorial_004_creative_briefs",
+    "metadata": {
+      "created_at": "2024-09-28T12:20:00Z",
+      "source": "tutorial",
+      "language": "en"
+    },
+    "content": {
+      "title": "Writing Effective Creative Briefs for Freelance Artists",
+      "summary": "Master the art of writing creative briefs that get results. Covers visual references, brand guidelines, revision processes, and communication best practices for design, illustration, and video projects.",
+      "url": "https://creativebriefs.design/effective-briefing-tutorial",
+      "type": "tutorial"
+    },
+    "categorization": {
+      "primary_category": "use_cases",
+      "secondary_categories": ["hiring_guidance", "talent_management"],
+      "tags": ["creative brief", "design projects", "communication", "artists", "visual projects"],
+      "difficulty_level": "intermediate",
+      "target_roles": ["marketing_director", "product_manager"]
+    },
+    "recommendation_metadata": {
+      "popularity_score": 0.71,
+      "quality_score": 0.86,
+      "freshness_score": 0.79,
+      "avg_user_rating": 4.3,
+      "view_count": 5900,
+      "recommendation_count": 64
+    }
+  }
+]

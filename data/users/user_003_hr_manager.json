@@ -1,0 +1,55 @@
+{
+  "user_id": "user_003_hr_manager", 
+  "metadata": {
+    "created_at": "2024-09-10T07:30:00Z",
+    "last_updated": "2024-10-15T14:15:00Z",
+    "version": "1.0"
+  },
+  "profile": {
+    "name": "Martín Cortés",
+    "role": "Head of People",
+    "company_type": "scale_up",
+    "industry": "SaaS", 
+    "experience_level": "mid",
+    "main_interests": ["work_culture", "talent_management"],
+    "pain_points": ["remote_coordination", "cultural_fit"]
+  },
+  "query_history": [
+    {
+      "query_id": "q_001",
+      "query": "¿Qué es el modelo Full Flex de Shakers?",
+      "timestamp": "2024-09-12T11:20:00Z",
+      "category": "work_culture",
+      "intent": "information_seeking"
+    },
+    {
+      "query_id": "q_002",
+      "query": "¿Cómo valida Shakers el encaje cultural?",
+      "timestamp": "2024-09-18T13:45:00Z", 
+      "category": "hiring_process",
+      "intent": "validation_seeking"
+    },
+    {
+      "query_id": "q_003",
+      "query": "¿Puedo trabajar con freelancers 100% remotos?",
+      "timestamp": "2024-09-25T10:10:00Z",
+      "category": "work_culture",
+      "intent": "decision_support"
+    }
+  ],
+  "computed_profile": {
+    "interest_scores": {
+      "work_culture": 0.9,
+      "hiring_process": 0.6,
+      "talent_management": 0.7
+    },
+    "engagement_pattern": "explorer",
+    "complexity_preference": "basic", 
+    "recency_bias": 0.5
+  },
+  "preferences": {
+    "content_types": ["article", "documentation"],
+    "difficulty_level": "beginner",
+    "language": "es"
+  }
+}

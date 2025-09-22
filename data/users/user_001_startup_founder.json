@@ -1,0 +1,33 @@
+{
+  "user_id": "user_001_startup_founder",
+  "metadata": {
+    "created_at": "2024-11-15T09:00:00Z",
+    "last_updated": "2024-11-20T13:25:00Z",
+    "version": "1.0"
+  },
+  "profile": {
+    "name": "María García",
+    "role": "CEO/Founder", 
+    "company_type": "startup",
+    "industry": "FinTech",
+    "experience_level": "senior",
+    "main_interests": ["mvp_development", "technical_talent", "product_scaling"],
+    "pain_points": ["hiring_speed", "technical_validation", "budget_constraints"]
+  },
+  "computed_profile": {
+    "interest_scores": {
+      "hiring_process": 0.8,
+      "ai_capabilities": 0.7, 
+      "technical_skills": 0.9,
+      "squad_capabilities": 0.6
+    },
+    "engagement_pattern": "decision_maker",
+    "complexity_preference": "intermediate",
+    "recency_bias": 0.7
+  },
+  "preferences": {
+    "content_types": ["tutorial", "case_study", "tool"],
+    "difficulty_level": "intermediate",
+    "language": "en"
+  }
+}
