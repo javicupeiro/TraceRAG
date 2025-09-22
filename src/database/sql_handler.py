@@ -1,6 +1,6 @@
 import logging
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 
 from sqlalchemy import create_engine, Column, String, Integer, Text, JSON
 from sqlalchemy.orm import sessionmaker, DeclarativeBase
