@@ -29,6 +29,7 @@ from processing.multimodal_summarizer import MultimodalSummarizer
 from ui.tab1_processing import render_tab1
 from ui.tab2_visualization import render_tab2
 from ui.tab3_chat import render_tab3
+from ui.tab4_recommendations import render_tab4
 
 # --- Page Configuration ---
 st.set_page_config(
@@ -198,10 +199,11 @@ def main():
         st.sidebar.info("Set GROQ_API_KEY or GEMINI_API_KEY environment variables")
     
     # --- Main Application Tabs ---
-    tab1, tab2, tab3 = st.tabs([
+    tab1, tab2, tab3, tab4 = st.tabs([
         "📄 Document Processing",
         "📊 Chunks Visualization", 
-        "💬 Chat with Documents"
+        "💬 Chat with Documents",
+        "🎯 AI Recommendations"
     ])
 
     with tab1:
@@ -212,6 +214,9 @@ def main():
     
     with tab3:
         render_tab3(embedder, vector_handler, sql_handler, base_prompt_dir)
+    
+    with tab4:
+        render_tab4(sql_handler, vector_handler, embedder, base_prompt_dir)
 
 if __name__ == "__main__":
     logger.info("Starting Intelligent Support System application...")

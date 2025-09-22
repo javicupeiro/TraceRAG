@@ -3,7 +3,7 @@ name = "tracerag"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = "==3.12.*"
 dependencies = [
     "docling==2.53.0",
     "docling-core>=2.48.1",
@@ -15,4 +15,5 @@ dependencies = [
     "pyyaml>=6.0.2",
     "pytest>=8.4.2",
     "pytest-mock>=3.15.1",
+    "plotly>=6.3.0",
 ]

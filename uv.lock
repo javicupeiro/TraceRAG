@@ -1238,6 +1238,19 @@ wheels = [
 ]
 
 [[package]]
+name = "plotly"
+version = "6.3.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "narwhals" },
+    { name = "packaging" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/a0/64/850de5076f4436410e1ce4f6a69f4313ef6215dfea155f3f6559335cad29/plotly-6.3.0.tar.gz", hash = "sha256:8840a184d18ccae0f9189c2b9a2943923fd5cae7717b723f36eef78f444e5a73", size = 6923926, upload-time = "2025-08-12T20:22:14.127Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/95/a9/12e2dc726ba1ba775a2c6922d5d5b4488ad60bdab0888c337c194c8e6de8/plotly-6.3.0-py3-none-any.whl", hash = "sha256:7ad806edce9d3cdd882eaebaf97c0c9e252043ed1ed3d382c3e3520ec07806d4", size = 9791257, upload-time = "2025-08-12T20:22:09.205Z" },
+]
+
+[[package]]
 name = "pluggy"
 version = "1.6.0"
 source = { registry = "https://pypi.org/simple" }
@@ -2515,6 +2528,7 @@ dependencies = [
     { name = "docling" },
     { name = "docling-core" },
     { name = "pillow" },
+    { name = "plotly" },
     { name = "pymilvus" },
     { name = "pytest" },
     { name = "pytest-mock" },
@@ -2529,6 +2543,7 @@ requires-dist = [
     { name = "docling", specifier = "==2.53.0" },
     { name = "docling-core", specifier = ">=2.48.1" },
     { name = "pillow", specifier = ">=11.3.0" },
+    { name = "plotly", specifier = ">=6.3.0" },
     { name = "pymilvus", specifier = ">=2.6.2" },
     { name = "pytest", specifier = ">=8.4.2" },
     { name = "pytest-mock", specifier = ">=3.15.1" },

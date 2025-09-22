@@ -17,17 +17,24 @@ def display_chunk(chunk: dict, key_prefix: str = ""):
     """
     chunk_type = chunk.get('chunk_type', 'unknown')
     chunk_id = chunk.get('id', 'unknown')
+    document_id = chunk.get('document_id', 'Unknown Document')
+    source_page = chunk.get('source_page', 'N/A')
     
     with st.container():
-        # Header with chunk info
-        col1, col2, col3 = st.columns([2, 1, 1])
+        # Enhanced header with document info
+        st.markdown(f"**📄 Document:** {document_id}")
+        
+        col1, col2, col3, col4 = st.columns([1.5, 1, 1, 1])
+        
         with col1:
-            st.write(f"**Chunk ID:** `{chunk_id}`")
+            st.write(f"**Section:** Page {source_page}" if source_page != 'N/A' else "**Section:** Main")
         with col2:
             st.write(f"**Type:** {chunk_type.title()}")
         with col3:
-            source_page = chunk.get('source_page', 'N/A')
-            st.write(f"**Page:** {source_page}")
+            similarity_value = chunk.get('cosine_similarity', chunk.get('l2_distance', 0))
+            st.write(f"**Relevance:** {similarity_value:.3f}")
+        with col4:
+            st.write(f"**ID:** `{chunk_id[:8]}...`")
         
         # Content based on type
         if chunk_type == 'text':
