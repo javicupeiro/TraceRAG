@@ -130,10 +130,10 @@ class ConfigManager:
             Dict[str, Any]: Database configuration
         """
         return {
-            'sql_path': self.get('DATABASE.SQL.PATH'),
-            'milvus_host': self.get('DATABASE.MILVUS.HOST'),
-            'milvus_port': self.get('DATABASE.MILVUS.PORT'),
-            'collection_name': self.get('DATABASE.MILVUS.COLLECTION_NAME')
+            'sql_path': self.get_env_or_config('SQL_PATH', 'DATABASE.SQL.PATH'),
+            'milvus_host': self.get_env_or_config('MILVUS_HOST', 'DATABASE.MILVUS.HOST'),
+            'milvus_port': self.get_env_or_config('MILVUS_PORT', 'DATABASE.MILVUS.PORT'),
+            'collection_name': self.get_env_or_config('MILVUS_COLLECTION', 'DATABASE.MILVUS.COLLECTION_NAME')
         }
     
     def get_env_or_config(self, env_key: str, config_key: str, default: Any = None) -> Any:

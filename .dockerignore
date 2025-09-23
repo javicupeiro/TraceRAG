@@ -1,0 +1,78 @@
+# .dockerignore
+
+# Cache de Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Entornos virtuales y configuración sensible
+.env*          # Excluir archivos .env (pero .env.example se puede incluir si quieres)
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.uv/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Documentación y desarrollo
+README.md
+*.md
+docs/
+notebooks/
+tests/
+
+# Logs
+*.log
+logs/
+
+# Archivos temporales
+tmp/
+temp/
+.tmp/
+
+# Docker
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# Datos que pueden ser grandes o sensibles
+# (comentar si necesitas estos datos en la imagen)
+data/vector_store/
+data/document_store/
+*.db
+
+# Scripts de desarrollo
+scripts/
