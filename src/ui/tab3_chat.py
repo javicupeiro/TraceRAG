@@ -5,7 +5,7 @@ from database.vector_handler import VectorHandler
 from llm_provider.llm_factory import LLMProviderFactory
 from llm_provider.base_llm_provider import LLMChunk
 from pathlib import Path
-from typing import List, Tuple
+from typing import List, Tuple, Any
 import numpy as np
 import time
 import logging
@@ -156,7 +156,101 @@ def build_multimodal_prompt_and_chunks(chunks: List[dict]) -> Tuple[str, List[LL
 
     final_context_str = "\n\n".join(prompt_context_parts)
     return final_context_str, llm_chunks
+
+def generate_recommendations_for_tab3(query: str, original_chunks: List[dict], 
+                                    sql_handler: SQLHandler, embedder: Embedder) -> List[Any]:
+    """Generate recommendations based on the current query and retrieved chunks."""
     
+    try:
+        from recommendation.models import UserProfile
+        from recommendation.adapters import ChunkToResourceAdapter
+        from recommendation.engines import RecommendationEngine
+        
+        # Create a temporary user profile based on current session
+        temp_user = create_temp_user_profile(query)
+        
+        # Initialize recommendation components
+        adapter = ChunkToResourceAdapter(sql_handler)
+        engine = RecommendationEngine()
+        
+        # Load all available resources
+        from pathlib import Path
+        resources_dir = Path("data/resources")
+        external_resources = adapter.load_external_resources(resources_dir)
+        chunk_resources = adapter.get_all_resources_from_chunks()
+        
+        all_resources = external_resources + chunk_resources
+        
+        if not all_resources:
+            return []
+        
+        # Filter out resources that are already in the current response
+        used_chunk_ids = {chunk.get('id') for chunk in original_chunks}
+        filtered_resources = [r for r in all_resources if r.resource_id not in used_chunk_ids]
+        
+        # Generate recommendations
+        recommendations = engine.generate_recommendations(
+            user=temp_user,
+            all_resources=filtered_resources,
+            current_query=query,
+            num_recommendations=3
+        )
+        
+        return recommendations
+        
+    except Exception as e:
+        logger.warning(f"Could not generate recommendations: {str(e)}")
+        return []
+
+def create_temp_user_profile(query: str) -> 'UserProfile':
+    """Create a temporary user profile for recommendation generation."""
+    
+    from recommendation.models import UserProfile
+    from datetime import datetime
+    
+    # Analyze query to infer user characteristics
+    query_lower = query.lower()
+    
+    # Simple role detection
+    role = "General User"
+    if any(word in query_lower for word in ['hire', 'hiring', 'recruit']):
+        role = "HR Manager"
+    elif any(word in query_lower for word in ['marketing', 'campaign', 'growth']):
+        role = "Marketing Director"
+    elif any(word in query_lower for word in ['product', 'feature', 'development']):
+        role = "Product Manager"
+    elif any(word in query_lower for word in ['culture', 'team', 'remote']):
+        role = "Head of People"
+    
+    # Create basic interests based on query
+    interests = {}
+    if any(word in query_lower for word in ['freelancer', 'squad', 'team']):
+        interests['talent_management'] = 0.8
+    if any(word in query_lower for word in ['price', 'cost', 'budget']):
+        interests['pricing_models'] = 0.7
+    if any(word in query_lower for word in ['ai', 'artificial intelligence']):
+        interests['ai_features'] = 0.9
+    if any(word in query_lower for word in ['culture', 'remote', 'work']):
+        interests['work_culture'] = 0.8
+    
+    # Create temporary user profile
+    temp_user = UserProfile(
+        user_id="temp_tab3_user",
+        name="Tab3 User",
+        role=role,
+        company_type="startup",
+        experience_level="mid",
+        language_preference="en",
+        computed_interests=interests,
+        query_history=[{
+            'query': query,
+            'category': 'general_inquiry',
+            'intent': 'information_seeking',
+            'timestamp': datetime.now().isoformat()
+        }]
+    )
+    
+    return temp_user
 
 def render_tab3(embedder: Embedder, 
                 vector_handler: VectorHandler, 
@@ -182,7 +276,7 @@ def render_tab3(embedder: Embedder,
     # Configuration Section
     st.subheader("🔧 Chat Configuration")
     
-    col1, col2, col3 = st.columns(3)
+    col1, col2, col3, col4 = st.columns(4)
     
     with col1:
         # Language selector
@@ -225,6 +319,14 @@ def render_tab3(embedder: Embedder,
             help="Similarity metric for ranking retrieved documents"
         )
         search_metric = metric_options[selected_metric]
+
+    with col4:
+        # Recommendation toggle
+        show_recommendations = st.checkbox(
+            "💡 Show Recommendations",
+            value=True,
+            help="Generate related resource recommendations after each response"
+        )
 
     # Load the correct chat prompt based on the selected language
     prompt_template_path = Path(base_prompt_dir) / lang_code / "query_context.txt"
@@ -344,6 +446,30 @@ def render_tab3(embedder: Embedder,
                             for src_idx, chunk in enumerate(original_chunks):
                                 display_chunk_with_document_info(chunk, key_prefix=f"current_{src_idx}", search_metric=search_metric)
                     
+                    # 8.5. Generate and show recommendations (MOVED HERE - inside the chat block)
+                    if show_recommendations:
+                        with st.spinner("🎯 Generating related recommendations..."):
+                            recommendations = generate_recommendations_for_tab3(query, original_chunks, sql_handler, embedder)
+
+                        if recommendations:
+                            st.markdown("### 💡 Related Resources You Might Find Helpful")
+                            st.markdown("*Based on your query, here are some additional resources:*")
+
+                            for idx, rec in enumerate(recommendations, 1):
+                                with st.expander(f"📄 {rec.resource.title} (Relevance: {rec.final_score:.2f})", expanded=False):
+                                    col1, col2 = st.columns([3, 1])
+
+                                    with col1:
+                                        st.write(f"**Category:** {rec.resource.primary_category.replace('_', ' ').title()}")
+                                        st.write(f"**Source:** {rec.resource.source}")
+                                        st.info(f"💡 **Why recommended:** {rec.primary_reason}")
+                                        st.write(f"**Details:** {rec.detailed_explanation}")
+
+                                    with col2:
+                                        st.metric("Relevance", f"{rec.final_score:.3f}")
+                                        if rec.resource.url:
+                                            st.markdown(f"[🔗 View Resource]({rec.resource.url})")
+
                     # 9. Add response to chat history
                     st.session_state.messages.append({
                         "role": "assistant", 
@@ -435,3 +561,4 @@ def display_chunk_with_document_info(chunk: dict, key_prefix: str = "", search_m
             st.write(f"**Summary:** {summary}")
         
         st.divider()
+        
